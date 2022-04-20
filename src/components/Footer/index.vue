@@ -106,7 +106,7 @@
 
 <script>
 export default {
-  name: 'MyFooter'
+  name: 'Footer'
 }
 </script>
 
