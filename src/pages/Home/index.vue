@@ -1,6 +1,7 @@
 <template>
   <div>
-    我是首页
+    <h1>{{ count }}</h1>
+    <button @click="add">1111111</button>
     <TypeNav></TypeNav>
     <ListContainer></ListContainer>
     <Recommand></Recommand>
@@ -19,6 +20,10 @@ import Rank from './Rank'
 import Like from './Like'
 import Floor from './Floor'
 import Brand from './Brand'
+
+// 测试
+import { mapState } from 'vuex'
+
 export default {
   name: 'Home',
   components: {
@@ -28,6 +33,14 @@ export default {
     Like,
     Floor,
     Brand
+  },
+  computed: {
+    ...mapState('home', ['count'])
+  },
+  methods: {
+    add() {
+      this.$store.commit('home/ADD', this.count + 1)
+    }
   }
 }
 </script>
