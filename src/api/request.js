@@ -23,6 +23,7 @@ requests.interceptors.response.use((response) => {
   // do something
   // 进度条结束：
   nprogress.done()
+  // 这里返回了reponse.data,其他模块发请求接收的数据直接就是服务器的数据，不再是axios再包一层的数据
   return response.data
 }, (error) => {
   return Promise.reject(error)

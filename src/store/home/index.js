@@ -1,15 +1,22 @@
+import { reqCategoryList } from '@/api/index'
+
 const home = {
   namespaced: true,
   state: {
-    count: 0
+    categoryList: []
   },
   mutations: {
-    ADD(state, value) {
-      state.count = value
+    INITCATEGORYLIST(state, res) {
+      state.categoryList = res
     }
   },
   actions: {
+    async initCategoryList(state) {
+      let { data: res } = await reqCategoryList()
 
+      res.length > 16 ? res.pop() : res
+      state.commit('INITCATEGORYLIST', res)
+    }
   },
   getters: {
 

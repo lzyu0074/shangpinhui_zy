@@ -4,8 +4,8 @@ import App from './App.vue'
 import router from './router'
 import store from '@/store'
 
-// 全局组件：
-import TypeNav from '@/pages/Home/TypeNav'
+// 全局组件： 
+import TypeNav from '@/components/TypeNav'
 Vue.component(TypeNav.name, TypeNav)
 
 // 测试

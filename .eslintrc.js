@@ -1,7 +1,7 @@
 module.exports = {
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module"
+    "ecmaVersion": 8,
+    "sourceType": "module",
   },
   rules: {
     //在rules中添加自定义规则
