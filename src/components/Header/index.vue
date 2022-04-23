@@ -50,16 +50,10 @@ export default {
   },
   methods: {
     search() {
-      // this.$router.push('/search/' + this.searchWord + '?k=' + this.searchWord.toUpperCase())
-      this.$router.push({
-        name: 'search',
-        params: {
-          searchword: '' || undefined
-        },
-        query: {
-          k: this.searchWord.toUpperCase()
-        }
-      })
+      const location = { name: 'search', params: { keyword: this.searchWord || undefined } }
+      // 合并参数，把params和query参数合并在一起传去search
+      location.query = this.$route.query
+      this.$router.push(location)
     }
   }
 }

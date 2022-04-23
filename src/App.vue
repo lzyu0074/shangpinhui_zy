@@ -14,6 +14,10 @@ export default {
   components: {
     Header,
     Footer
+  },
+  // 派发一个action，获取菜单数据
+  created() {
+    this.$store.dispatch('home/initCategoryList')
   }
 }
 </script>

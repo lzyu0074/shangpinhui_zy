@@ -1,9 +1,6 @@
 <template>
   <div>
-    我是搜索
-
-    <h2>params:-----------{{ $route.params.searchword }}</h2>
-    <h2>query:-----------{{ $route.query.k }}</h2>
+    <TypeNav></TypeNav>
   </div>
 </template>
 
