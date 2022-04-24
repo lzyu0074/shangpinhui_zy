@@ -11,3 +11,20 @@ export const reqCategoryList = () => mockRequest.get('/category')
 
 // 轮播图
 export const reqBanner = () => mockRequest.get('/banner')
+
+// 首页底部的floors
+export const reqFloors = () => mockRequest.get('/floors')
+
+const delay = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, 2000)
+  })
+}
+
+export const delayReqFloors = () => {
+  return delay().then(() => {
+    return mockRequest.get('/floors')
+  })
+}

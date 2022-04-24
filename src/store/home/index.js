@@ -1,10 +1,11 @@
-import { reqCategoryList, reqBanner } from '@/api/index'
+import { reqCategoryList, reqBanner, reqFloors, delayReqFloors } from '@/api/index'
 
 const home = {
   namespaced: true,
   state: {
     categoryList: [],
-    bannerList: []
+    bannerList: [],
+    floorsList: []
   },
   mutations: {
     INITCATEGORYLIST(state, res) {
@@ -12,6 +13,9 @@ const home = {
     },
     SETBANNER(state, res) {
       state.bannerList = res
+    },
+    GETFLOORS(state, res) {
+      state.floorsList = res
     }
   },
   actions: {
@@ -26,6 +30,16 @@ const home = {
       const res = await reqBanner()
       if (res.code === 200) {
         state.commit('SETBANNER', res.data)
+      }
+    },
+    async getFloors(state) {
+      // const res = await reqFloors()
+      // if (res.code === 200) {
+      //   state.commit('GETFLOORS', res.data)
+      // }
+      const res = await delayReqFloors()
+      if (res.code === 200) {
+        state.commit('GETFLOORS', res.data)
       }
     }
   },

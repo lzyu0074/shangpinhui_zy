@@ -5,5 +5,6 @@ import floors from './floors.json'
 
 Mock.mock('/mock/category', category)
 Mock.mock('/mock/banner', { code: 200, data: banner })
-Mock.mock('/mock/banner', { code: 200, data: banner })
+
+// 首页底部的floors
 Mock.mock('/mock/floors', { code: 200, data: floors })
