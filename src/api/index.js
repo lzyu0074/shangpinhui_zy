@@ -15,6 +15,7 @@ export const reqBanner = () => mockRequest.get('/banner')
 // 首页底部的floors
 export const reqFloors = () => mockRequest.get('/floors')
 
+// 延迟promise函数
 const delay = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -22,9 +23,12 @@ const delay = () => {
     }, 2000)
   })
 }
-
+// 延迟2秒发送请求 mock数据
 export const delayReqFloors = () => {
   return delay().then(() => {
     return mockRequest.get('/floors')
   })
 }
+
+// 获取search数据
+export const reqSearchInfo = (searchParams) => requests({ url: '/list', method: 'post', data: searchParams })

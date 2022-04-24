@@ -6,7 +6,7 @@ import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 
 const requests = axios.create({
-  // baseURL: '/api',
+  baseURL: '/api',
   timeout: 5000
 })
 

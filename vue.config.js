@@ -4,11 +4,11 @@ module.exports = defineConfig({
   devServer: {
     host: 'localhost',
     // 代理
-    // proxy: {
-    //   '/api': {
-    //     target: 'http://39.98.123.211',
-    //   },
-    // },
+    proxy: {
+      '/api': {
+        target: 'http://39.98.123.211',
+      },
+    },
   },
   lintOnSave: false
 })

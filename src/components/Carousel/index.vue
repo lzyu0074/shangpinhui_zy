@@ -32,7 +32,9 @@ export default {
 
             // 如果需要分页器
             pagination: {
-              el: '.swiper-pagination'
+              el: '.swiper-pagination',
+              // 分页器可点击
+              clickable: true
             },
 
             // 如果需要前进后退按钮

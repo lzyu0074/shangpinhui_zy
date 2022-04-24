@@ -20,26 +20,26 @@ const home = {
   },
   actions: {
     // 发请求 获取三级菜单数据
-    async initCategoryList(state) {
+    async initCategoryList(context) {
       let { data: res } = await reqCategoryList()
 
       res.length > 16 ? res.pop() : res
-      state.commit('INITCATEGORYLIST', res)
+      context.commit('INITCATEGORYLIST', res)
     },
-    async getBanner(state) {
+    async getBanner(context) {
       const res = await reqBanner()
       if (res.code === 200) {
-        state.commit('SETBANNER', res.data)
+        context.commit('SETBANNER', res.data)
       }
     },
-    async getFloors(state) {
+    async getFloors(context) {
       // const res = await reqFloors()
       // if (res.code === 200) {
-      //   state.commit('GETFLOORS', res.data)
+      //   context.commit('GETFLOORS', res.data)
       // }
       const res = await delayReqFloors()
       if (res.code === 200) {
-        state.commit('GETFLOORS', res.data)
+        context.commit('GETFLOORS', res.data)
       }
     }
   },
