@@ -4,7 +4,7 @@
       <div class="fl key brand">品牌</div>
       <div class="value logos">
         <ul class="logo-list">
-          <li v-for="item in trademarkList" :key="item.tmId">{{ item.tmName }}</li>
+          <li v-for="item in trademarkList" :key="item.tmId" @click="goSearch(item)">{{ item.tmName }}</li>
           <!-- <li>TCL</li>
           <li>长虹（CHANGHONG）</li>
           <li>飞利浦（PHILIPS）</li>
@@ -161,6 +161,11 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'SearchSelector',
+  methods: {
+    goSearch(trademark) {
+      this.$emit('trademark', trademark)
+    }
+  },
   computed: {
     ...mapGetters('search', ['attrsList']),
     ...mapGetters('search', ['trademarkList'])

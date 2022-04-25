@@ -55,6 +55,11 @@ export default {
       location.query = this.$route.query
       this.$router.push(location)
     }
+  },
+  mounted() {
+    this.$bus.$on('clearInput', () => {
+      this.searchWord = ''
+    })
   }
 }
 </script>

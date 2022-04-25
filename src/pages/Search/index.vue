@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 三级分类组件 -->
     <TypeNav />
     <div class="main">
       <div class="py-container">
@@ -11,15 +12,14 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-if="searchParms.categoryName">{{ searchParms.categoryName }}<i @click="removeBreadAndGoRequest('clearCategoryName')">×</i></li>
+            <li class="with-x" v-if="searchParms.keyword">{{ searchParms.keyword }}<i @click="removeBreadAndGoRequest('clearParams')">×</i></li>
+            <li class="with-x" v-if="searchParms.trademark">{{ searchParms.trademark.split(':')[1] }}<i @click="removeBreadAndGoRequest('clearTrademark')">×</i></li>
           </ul>
         </div>
 
-        <!--selector 自己的组件-->
-        <SearchSelector />
+        <!--selector 自己的子组件-->
+        <SearchSelector @trademark="clickTrademark" />
 
         <!--details-->
         <div class="details clearfix">
@@ -115,14 +115,81 @@ import SearchSelector from './SearchSelector/SearchSelector'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Search',
+  data() {
+    return {
+      // 请求参数，包含搜索框param参数和分类的query参数
+      searchParms: {
+        category1Id: '',
+        category2Id: '',
+        category3Id: '',
+        categoryName: '',
+        keyword: '',
+        props: [],
+        trademark: '',
+        order: '',
+        pageNo: 1,
+        pageSize: 10
+      }
+    }
+  },
+  watch: {
+    $route: {
+      deep: true,
+      handler() {
+        this.goRequest()
+      }
+    }
+  },
+  methods: {
+    // 子组件事件
+    clickTrademark(item) {
+      // 拼接参数格式
+      this.searchParms.trademark = `${item.tmId}:${item.tmName}`
+      // 准备路由对象
+      const location = { name: 'search', query: { ...this.$route.query, trademark: this.searchParms.trademark } }
+      // 跳转路由，watch会根据路由的变化自动发送请求
+      this.$router.push(location)
+    },
+    removeBreadAndGoRequest(which) {
+      if (which === 'clearCategoryName') {
+        // 清空this.searchParms的categoryName即可remove面包屑
+        this.searchParms.categoryName = ''
+        this.$router.push({ name: 'search', params: this.$route.params })
+      } else if (which === 'clearParams') {
+        // 清空this.searchParms参数的keyword即可remove面包屑
+        this.searchParms.keyword = ''
+        this.$router.push({ name: 'search', query: this.$route.query })
+        // 还要传输数据去header组件告诉他清空输入框 ---> 全局事件总线
+        this.$bus.$emit('clearInput')
+      } else if (which === 'clearTrademark') {
+        this.searchParms.trademark = ''
+        // 分隔---------------------
+
+        this.$route.query.trademark = ''
+        this.goRequest() //路由没变---待解决
+        // const query = { ...this.$route.query, trademark: undefined }
+        // this.$router.push({ name: 'search', query: this.$route.query })
+        // 路由没watch到，没发生变化
+      }
+    },
+    goRequest() {
+      // 清空3个id
+      this.searchParms.category1Id = ''
+      this.searchParms.category2Id = ''
+      this.searchParms.category3Id = ''
+      // 重新根据路由拼接对象
+      this.searchParms = { ...this.searchParms, ...this.$route.params, ...this.$route.query }
+      this.$store.dispatch('search/getSearchInfo', this.searchParms)
+    }
+  },
+  created() {
+    this.goRequest()
+  },
   computed: {
     ...mapGetters('search', ['goodsList'])
   },
   components: {
     SearchSelector
-  },
-  created() {
-    this.$store.dispatch('search/getSearchInfo', {})
   }
 }
 </script>

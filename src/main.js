@@ -20,8 +20,13 @@ Vue.component(Carousel.name, Carousel)
 
 Vue.config.productionTip = false
 
+// 全局事件总线（eventBus）
+
 new Vue({
   render: h => h(App),
   router,
-  store
+  store,
+  beforeCreate() {
+    Vue.prototype.$bus = this
+  },
 }).$mount('#app')

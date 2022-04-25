@@ -83,7 +83,9 @@ export default {
     },
     // 点击三联菜单中的链接跳转到search页面
     toSearch(e) {
-      // this.$router({ name: 'search', query: {} })
+      // 鼠标点击时，隐藏sort
+      this.removeBgcAndHideSort()
+
       const location = { name: 'search' }
       const query = {}
       const { categoryname, category1id, category2id, category3id } = e.target.dataset
