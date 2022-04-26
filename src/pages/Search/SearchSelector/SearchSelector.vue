@@ -29,40 +29,13 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
-    <div class="type-wrap" v-for="item in attrsList" :key="item.attrId">
-      <div class="fl key">{{ item.attrName }}</div>
+    <div class="type-wrap" v-for="attrs in attrsList" :key="attrs.attrId">
+      <div class="fl key">{{ attrs.attrName }}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(item, index) in item.attrValueList" :key="index">
-            <a>{{ item }}</a>
+          <li v-for="(value, index) in attrs.attrValueList" :key="index">
+            <a @click="attrsClickEvent(attrs, value)">{{ value }}</a>
           </li>
-          <!-- <li>
-            <a>电信2G</a>
-          </li>
-          <li>
-            <a>电信3G</a>
-          </li>
-          <li>
-            <a>移动3G</a>
-          </li>
-          <li>
-            <a>联通3G</a>
-          </li>
-          <li>
-            <a>联通4G</a>
-          </li>
-          <li>
-            <a>电信3G</a>
-          </li>
-          <li>
-            <a>移动3G</a>
-          </li>
-          <li>
-            <a>联通3G</a>
-          </li>
-          <li>
-            <a>联通4G</a>
-          </li> -->
         </ul>
       </div>
       <div class="fl ext"></div>
@@ -162,6 +135,9 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'SearchSelector',
   methods: {
+    attrsClickEvent(attrs, value) {
+      this.$emit('attrsValueClick', attrs, value)
+    },
     goSearch(trademark) {
       this.$emit('trademark', trademark)
     }
@@ -246,6 +222,7 @@ export default {
           a {
             text-decoration: none;
             color: #666;
+            cursor: pointer;
           }
         }
       }

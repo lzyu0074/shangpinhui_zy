@@ -12,37 +12,26 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x" v-if="searchParms.categoryName">{{ searchParms.categoryName }}<i @click="removeBreadAndGoRequest('clearCategoryName')">×</i></li>
-            <li class="with-x" v-if="searchParms.keyword">{{ searchParms.keyword }}<i @click="removeBreadAndGoRequest('clearParams')">×</i></li>
-            <li class="with-x" v-if="searchParms.trademark">{{ searchParms.trademark.split(':')[1] }}<i @click="removeBreadAndGoRequest('clearTrademark')">×</i></li>
+            <li class="with-x" v-if="searchParms.categoryName">{{ searchParms.categoryName }}<i @click="removeBreadAndGoRequest(1)">×</i></li>
+            <li class="with-x" v-if="searchParms.keyword">{{ searchParms.keyword }}<i @click="removeBreadAndGoRequest(2)">×</i></li>
+            <li class="with-x" v-if="searchParms.trademark">{{ searchParms.trademark.split(':')[1] }}<i @click="removeBreadAndGoRequest(3)">×</i></li>
+            <li class="with-x" v-for="(attrsItem, index) in searchParms.props" :key="attrsItem.split(':')[0]">{{ attrsItem.split(':')[1] }}<i @click="removeAttrsBread(index)">×</i></li>
           </ul>
         </div>
 
         <!--selector 自己的子组件-->
-        <SearchSelector @trademark="clickTrademark" />
+        <SearchSelector @trademark="clickTrademark" @attrsValueClick="getAttrsFromSon" />
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: showArrow === '1' }" @click="orderClick(1)">
+                  <a href="javascript:;">综合<span class="iconfont" :class="upOrDown === 'asc' ? 'icon-xiangshang' : 'icon-paixu'" v-show="showArrow === '1'"></span></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: showArrow === '2' }" @click="orderClick(2)">
+                  <a href="javascript:;">价格<span class="iconfont" :class="upOrDown === 'asc' ? 'icon-xiangshang' : 'icon-paixu'" v-show="showArrow === '2'"></span></a>
                 </li>
               </ul>
             </div>
@@ -126,21 +115,35 @@ export default {
         keyword: '',
         props: [],
         trademark: '',
-        order: '',
+        order: '1:desc',
         pageNo: 1,
         pageSize: 10
       }
     }
   },
+
   watch: {
     $route: {
-      deep: true,
       handler() {
         this.goRequest()
       }
     }
   },
   methods: {
+    // order排序点击事件
+    orderClick(flag) {
+      const orignFlag = this.searchParms.order.split(':')[0]
+      const orignOrder = this.searchParms.order.split(':')[1]
+      let newOrder = ''
+      if (flag == orignFlag) {
+        newOrder = `${flag}:${orignOrder === 'asc' ? 'desc' : 'asc'}`
+      } else {
+        newOrder = `${flag}:${'desc'}`
+      }
+      this.searchParms.order = newOrder
+      // 不改路由了
+      this.goRequest()
+    },
     // 子组件事件
     clickTrademark(item) {
       // 拼接参数格式
@@ -150,30 +153,58 @@ export default {
       // 跳转路由，watch会根据路由的变化自动发送请求
       this.$router.push(location)
     },
-    removeBreadAndGoRequest(which) {
-      if (which === 'clearCategoryName') {
-        // 清空this.searchParms的categoryName即可remove面包屑
-        this.searchParms.categoryName = ''
-        this.$router.push({ name: 'search', params: this.$route.params })
-      } else if (which === 'clearParams') {
-        // 清空this.searchParms参数的keyword即可remove面包屑
-        this.searchParms.keyword = ''
-        this.$router.push({ name: 'search', query: this.$route.query })
-        // 还要传输数据去header组件告诉他清空输入框 ---> 全局事件总线
-        this.$bus.$emit('clearInput')
-      } else if (which === 'clearTrademark') {
-        this.searchParms.trademark = ''
-        // 分隔---------------------
+    // 点击了商品属性
+    getAttrsFromSon(attrs, value) {
+      // 若数组中已存在，跳过
+      if (this.searchParms.props.indexOf(`${attrs.attrId}:${value}:${attrs.attrName}`) !== -1) return
+      this.searchParms.props.push(`${attrs.attrId}:${value}:${attrs.attrName}`)
+      // const location = { name: 'search', query: { ...this.$route.query, props: this.searchParms.props } }
+      // console.log(1111111)
+      // this.$router.push(location)
+      // 不搞路由了，先跳过这里，直接发请求吧
 
-        this.$route.query.trademark = ''
-        this.goRequest() //路由没变---待解决
-        // const query = { ...this.$route.query, trademark: undefined }
-        // this.$router.push({ name: 'search', query: this.$route.query })
-        // 路由没watch到，没发生变化
+      this.goRequest()
+    },
+    // 点击了商品属性的x
+    removeAttrsBread(index) {
+      this.searchParms.props.splice(index, 1)
+      this.goRequest()
+    },
+
+    removeBreadAndGoRequest(which) {
+      switch (which) {
+        case 1:
+          // 清空this.searchParms的categoryName即可remove面包屑
+          this.searchParms.categoryName = ''
+          let tempQuery1 = { ...this.$route.query, categoryName: undefined, category1Id: undefined, category2Id: undefined, category3Id: undefined }
+          this.$router.push({ name: 'search', params: this.$route.params, query: tempQuery1 })
+          break
+
+        case 2:
+          // 清空this.searchParms参数的keyword即可remove面包屑
+          this.searchParms.keyword = ''
+          this.$router.push({ name: 'search', query: this.$route.query })
+          // 还要传输数据去header组件告诉他清空输入框 ---> 全局事件总线
+          this.$bus.$emit('clearInput')
+          break
+        case 3:
+          this.searchParms.trademark = ''
+
+          // 必须用新的临时变量去保存query对象，不然会引起监听不到路由的变化，从而无法发起请求
+          let tempQuery2 = { ...this.$route.query, trademark: undefined }
+          this.$router.push({ name: 'search', query: tempQuery2, params: this.$route.params })
+          break
+        case 4:
       }
+
+      // if (which === 'clearCategoryName') {
+      // } else if (which === 'clearParams') {
+      // } else if (which === 'clearTrademark') {
+      // }
     },
     goRequest() {
       // 清空3个id
+
       this.searchParms.category1Id = ''
       this.searchParms.category2Id = ''
       this.searchParms.category3Id = ''
@@ -186,7 +217,13 @@ export default {
     this.goRequest()
   },
   computed: {
-    ...mapGetters('search', ['goodsList'])
+    ...mapGetters('search', ['goodsList']),
+    showArrow() {
+      return this.searchParms.order.split(':')[0]
+    },
+    upOrDown() {
+      return this.searchParms.order.split(':')[1]
+    }
   },
   components: {
     SearchSelector
@@ -290,10 +327,17 @@ export default {
             display: block;
             float: left;
             margin: 0 10px 0 0;
+            .iconfont {
+              position: relative;
+              top: 2px;
+            }
 
             li {
+              width: 70px;
+              height: 41.32px;
               float: left;
               line-height: 18px;
+              text-align: center;
 
               a {
                 display: block;
