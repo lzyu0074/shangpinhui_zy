@@ -64,35 +64,7 @@
             </ul>
           </div>
           <!-- 分页 -->
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <Pagination :pageNo="searchInfo.pageNo" :pageSize="searchInfo.pageSize" :total="searchInfo.total" :continues="5" @pageChange="pageChangAndGoRequest"></Pagination>
         </div>
       </div>
     </div>
@@ -102,6 +74,7 @@
 <script>
 import SearchSelector from './SearchSelector/SearchSelector'
 import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'Search',
   data() {
@@ -116,8 +89,8 @@ export default {
         props: [],
         trademark: '',
         order: '1:desc',
-        pageNo: 1,
-        pageSize: 10
+        pageNo: 2,
+        pageSize: 5
       }
     }
   },
@@ -130,6 +103,12 @@ export default {
     }
   },
   methods: {
+    // 分页器点击事件
+    pageChangAndGoRequest(page) {
+      this.searchParms.pageNo = page
+      this.goRequest()
+    },
+
     // order排序点击事件
     orderClick(flag) {
       const orignFlag = this.searchParms.order.split(':')[0]
@@ -218,6 +197,7 @@ export default {
   },
   computed: {
     ...mapGetters('search', ['goodsList']),
+    ...mapState('search', ['searchInfo']),
     showArrow() {
       return this.searchParms.order.split(':')[0]
     },
