@@ -41,7 +41,7 @@
               <li class="yui3-u-1-5" v-for="good in goodsList" :key="good.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"><img :src="good.defaultImg" /></a>
+                    <router-link :to="`/detail/${good.id}`"><img :src="good.defaultImg" /></router-link>
                   </div>
                   <div class="price">
                     <strong>
@@ -89,7 +89,7 @@ export default {
         props: [],
         trademark: '',
         order: '1:desc',
-        pageNo: 2,
+        pageNo: 1,
         pageSize: 5
       }
     }
@@ -144,7 +144,7 @@ export default {
 
       this.goRequest()
     },
-    // 点击了商品属性的x
+    // 点击了商品属性面包屑的x
     removeAttrsBread(index) {
       this.searchParms.props.splice(index, 1)
       this.goRequest()

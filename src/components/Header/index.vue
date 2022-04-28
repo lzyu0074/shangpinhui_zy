@@ -45,7 +45,7 @@ export default {
   name: 'Header',
   data() {
     return {
-      searchWord: ''
+      searchWord: '手机'
     }
   },
   methods: {

@@ -5,6 +5,7 @@ import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Search from '@/pages/Search'
+import Detail from '@/pages/Detail'
 
 Vue.use(VueRouter)
 
@@ -12,7 +13,6 @@ Vue.use(VueRouter)
 // 重写push和replace方法：为他们传入回调，防止报错
 let originPush = VueRouter.prototype.push;
 let originReplace = VueRouter.prototype.replace;
-
 VueRouter.prototype.push = function(location, resolve, reject) {
   if (resolve && reject) {
     originPush.call(this, location, resolve, reject)
@@ -35,7 +35,13 @@ const router = new VueRouter({
     { path: '/login', component: Login, meta: { footerShow: false }, name: 'login' },
     { path: '/register', component: Register, meta: { footerShow: false }, name: 'register' },
     { path: '/search/:keyword?', component: Search, meta: { footerShow: true }, name: 'search' },
-  ]
+    { path: '/detail/:skuid', component: Detail, meta: { footerShow: true }, name: 'detail' }
+  ],
+  // 跳转路由后滚动条的位置
+  scrollBehavior(to, from, savedPosition) {
+    // return 期望滚动到哪个的位置
+    return { y: 155 }
+  }
 })
 
 export default router

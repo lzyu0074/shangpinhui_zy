@@ -1,6 +1,5 @@
 <template>
   <div class="pagination">
-    <h2>{{ numStartAndEnd }}{{ pageNo }}</h2>
     <button :disabled="pageNo === 1" @click="$emit('pageChange', pageNo - 1)">上一页</button>
     <button v-if="numStartAndEnd.start >= parseInt(continues / 2)" @click="$emit('pageChange', 1)">1</button>
     <button v-if="numStartAndEnd.start > parseInt(continues / 2)">···</button>
@@ -21,7 +20,8 @@ export default {
   props: ['pageNo', 'pageSize', 'total', 'continues'],
   computed: {
     totalPage() {
-      return Math.ceil(this.total / this.pageSize)
+      // 拿个 1 用来防止一进入的时候 totalPage为 NaN 导致报错
+      return Math.ceil(this.total / this.pageSize) || 0
     },
     numStartAndEnd() {
       const { pageNo, continues, totalPage } = this

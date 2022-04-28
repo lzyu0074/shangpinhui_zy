@@ -32,3 +32,9 @@ export const delayReqFloors = () => {
 
 // 获取search数据
 export const reqSearchInfo = (searchParams) => requests({ url: '/list', method: 'post', data: searchParams })
+
+// detail
+export const reqDetailInfo = (skuId) => requests({ url: `/item/${skuId}`, method: 'get' })
+
+// addCart
+export const reqAddtoCart = (params) => requests.post(`/cart/addToCart/${params.skuID}/${params.skuNum}`)
