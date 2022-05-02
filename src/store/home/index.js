@@ -33,14 +33,14 @@ const home = {
       }
     },
     async getFloors(context) {
-      // const res = await reqFloors()
-      // if (res.code === 200) {
-      //   context.commit('GETFLOORS', res.data)
-      // }
-      const res = await delayReqFloors()
+      const res = await reqFloors()
       if (res.code === 200) {
         context.commit('GETFLOORS', res.data)
       }
+      // const res = await delayReqFloors()
+      // if (res.code === 200) {
+      //   context.commit('GETFLOORS', res.data)
+      // }
     }
   },
   getters: {

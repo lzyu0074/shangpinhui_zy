@@ -33,8 +33,16 @@ export default {
   computed: {
     ...mapState('home', ['floorsList'])
   },
-  mounted() {
+  async mounted() {
     this.$store.dispatch('home/getFloors')
+
+    // 获取用户信息，根据请求头的token
+    // try {
+    //   await this.$store.dispatch('user/getUserInfo')
+    // } catch (error) {
+    //   console.log(error.message)
+    // }
+    // ↑ 在导航前置守卫里设置了若已登录则获取用户信息
   }
 }
 </script>

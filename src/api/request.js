@@ -1,5 +1,7 @@
 // 对axios进行二次封装
 import axios from 'axios'
+// 导入store获取游客uuid
+import store from '@/store'
 
 // 网页顶部进度条
 import nprogress from 'nprogress'
@@ -15,6 +17,14 @@ requests.interceptors.request.use((config) => {
   // do something
   // 进度条：
   nprogress.start()
+  // 配置中带上游客的uuid（临时令牌）
+  if (store.state.detail.uuid_token_tourist) {
+    config.headers.userTempId = store.state.detail.uuid_token_tourist
+  }
+  // 配置中带上用户token（若有) （登录后的真正的令牌）（后台优先度以此为准）这个token是从仓库里取的
+  if (store.state.user.userToken) {
+    config.headers.token = store.state.user.userToken
+  }
   return config
 })
 

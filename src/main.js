@@ -9,8 +9,14 @@ import '@/mock'
 
 // swiper
 import 'swiper/css/swiper.css'
+// import 'swiper/swiper-bundle.css'
+// import 'swiper/css'
+// import 'swiper/less'
 // 轮播图全局组件
 import Carousel from '@/components/Carousel'
+
+// 全部导入api里面的接口函数
+import * as API from '@/api'
 
 // 全局组件： 
 import TypeNav from '@/components/TypeNav'
@@ -29,6 +35,8 @@ new Vue({
   router,
   store,
   beforeCreate() {
-    Vue.prototype.$bus = this
+    Vue.prototype.$bus = this,
+      // 把导入的接口函数的大对象挂在Vue原型对象上
+      Vue.prototype.$API = API
   },
 }).$mount('#app')

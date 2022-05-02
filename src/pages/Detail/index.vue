@@ -78,6 +78,7 @@
                 <a class="plus" @click="buyNum++">+</a>
                 <a class="mins" :class="{ 'mins-not-allow': buyNum <= 1 }" @click="buyNum--">-</a>
               </div>
+              <!-- 加入购物车 -->
               <div class="add">
                 <a @click="addCart">加入购物车</a>
               </div>
@@ -342,6 +343,9 @@ export default {
     async addCart() {
       try {
         await this.$store.dispatch('detail/addCart', { skuID: this.skuInfo.skuAttrValueList[0].skuId, skuNum: this.buyNum })
+        sessionStorage.setItem('skuInfo', JSON.stringify(this.skuInfo))
+        sessionStorage.setItem('spuSaleAttrList', JSON.stringify(this.spuSaleAttrList))
+        this.$router.push({ name: 'AddCartSuccess', params: { buyNum: this.buyNum } })
       } catch {
         alert('添加失败')
       }

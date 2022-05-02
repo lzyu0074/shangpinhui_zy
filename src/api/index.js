@@ -38,3 +38,36 @@ export const reqDetailInfo = (skuId) => requests({ url: `/item/${skuId}`, method
 
 // addCart
 export const reqAddtoCart = (params) => requests.post(`/cart/addToCart/${params.skuID}/${params.skuNum}`)
+
+// 获取购物车列表
+export const reqGetCartList = () => requests({ url: '/cart/cartList', method: 'get' })
+
+// 删除购物车里某个商品 /api/cart/deleteCart/{skuId}
+export const reqDeleteCartGoodsById = (skuId) => requests({ url: `/cart/deleteCart/${skuId}`, method: 'delete' })
+
+// 切换商品选中状态 /api/cart/checkCart/{skuID}/{isChecked}
+export const reqGoodCheckedChange = ({ skuID, isChecked }) => requests.get(`/cart/checkCart/${skuID}/${isChecked}`)
+
+// 获取用户验证码/api/user/passport/sendCode/{phone}
+export const reqUserVerificationCode = (phone) => requests.get(`/user/passport/sendCode/${phone}`)
+
+// 注册 /api/user/passport/register
+export const reqRegister = (userData) => requests.post('/user/passport/register', userData)
+
+// 登录 /api/user/passport/login
+export const reqLogin = (userData) => requests({ url: '/user/passport/login', method: 'post', data: userData })
+
+// 根据token获取用户信息，token在请求拦截器的请求头里配置 /api/user/passport/auth/getUserInfo
+export const reqGetUserInfo = () => requests({ url: '/user/passport/auth/getUserInfo', method: 'get' })
+
+// 退出登录 /api/user/passport/logout
+export const reqUserLogout = () => requests.get('/user/passport/logout')
+
+// 订单交易页 （结算页）  /api/order/auth/trade
+export const reqOrderTrade = () => requests({ url: '/order/auth/trade', method: 'get' })
+
+// 提交订单 /api/order/auth/submitOrder?tradeNo={tradeNo}
+export const reqCommitOrder = (tradeNo, data) => requests({ url: `/order/auth/submitOrder?tradeNo=${tradeNo}`, data, method: 'post' })
+
+// 获取订单支付信息（订单提交成功页面） /api/payment/weixin/createNative/{orderId}
+export const reqOrderPayInfo = (orderId) => requests.get(`/payment/weixin/createNative/${orderId}`)

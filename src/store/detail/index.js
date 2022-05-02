@@ -1,9 +1,11 @@
 import { reqDetailInfo, reqAddtoCart } from '@/api/index'
+import { getTouristId } from '@/utils/getTouristId'
 
 const detail = {
   namespaced: true,
   state: {
-    detailInfo: {}
+    detailInfo: {},
+    uuid_token_tourist: getTouristId()
   },
   mutations: {
     GETDETAILINFO(state, data) {
@@ -18,7 +20,7 @@ const detail = {
         context.commit('GETDETAILINFO', res.data)
       }
     },
-    // 加入购物车
+    // 7. 添加到购物车(对已有物品进行数量改动)
     async addCart(context, params) {
       const res = await reqAddtoCart(params)
       if (res.code === 200) {
