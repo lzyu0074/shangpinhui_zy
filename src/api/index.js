@@ -70,4 +70,16 @@ export const reqOrderTrade = () => requests({ url: '/order/auth/trade', method: 
 export const reqCommitOrder = (tradeNo, data) => requests({ url: `/order/auth/submitOrder?tradeNo=${tradeNo}`, data, method: 'post' })
 
 // 获取订单支付信息（订单提交成功页面） /api/payment/weixin/createNative/{orderId}
-export const reqOrderPayInfo = (orderId) => requests.get(`/payment/weixin/createNative/${orderId}`)
+// export const reqOrderPayInfo = (orderId) => requests.get(`/payment/weixin/createNative/${orderId}`)
+// export const reqOrderPayInfo = (orderId) => requests({ url: `/payment/weixin/createNative/${orderId}`, method: 'post' })
+// 接口总是503，用mock数据顶一下吧，接口正常了记得换回真正的接口
+export const reqOrderPayInfo = (orderId) => requests({ url: `/mock/payment/weixin/createNative`, method: 'get' })
+
+// 查询订单支付状态  /api/payment/weixin/queryPayStatus/{orderId}
+// export const reqOrderPayStatus = (orderId) => requests.get(`/payment/weixin/queryPayStatus/${orderId}`)
+// 这个接口也崩了，用mock数据顶一下
+export const reqOrderPayStatus = (orderId) => requests.get(`/mock/payment/weixin/queryPayStatus`)
+
+
+// 获取我的订单列表 /api/order/auth/{page}/{limit}
+export const reqGetOrderList = (page, limit) => requests({ url: `/order/auth/${page}/${limit}`, method: 'get' })

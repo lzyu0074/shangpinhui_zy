@@ -11,6 +11,10 @@ import ShopCart from '@/pages/ShopCart'
 import store from '@/store'
 import Trade from '@/pages/Trade'
 import Pay from '@/pages/Pay'
+import PaySuccess from '@/pages/PaySuccess'
+import Center from '@/pages/Center'
+import MyOrder from '@/pages/Center/MyOrder'
+import GroupOrder from '@/pages/Center/GroupOrder'
 
 Vue.use(VueRouter)
 
@@ -45,6 +49,16 @@ const router = new VueRouter({
     { path: '/shopcart', component: ShopCart, meta: { footerShow: true }, name: 'ShopCart' },
     { path: '/trade', component: Trade, meta: { footerShow: true }, name: 'Trade' },
     { path: '/pay', component: Pay, meta: { footerShow: true }, name: 'pay' },
+    { path: '/paysuccess', component: PaySuccess, meta: { footerShow: true }, name: 'paysuccess' },
+    {
+      path: '/center', component: Center, meta: { footerShow: true }, name: 'center',
+      redirect: '/center/myorder',
+      children: [
+        { path: 'myorder', component: MyOrder, name: 'myorder' },
+        { path: 'grouporder', component: GroupOrder, name: 'grouporder' },
+      ],
+
+    },
 
   ],
   // 跳转路由后滚动条的位置

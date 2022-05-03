@@ -1,8 +1,8 @@
 <template>
   <div class="pagination">
     <button :disabled="pageNo === 1" @click="$emit('pageChange', pageNo - 1)">上一页</button>
-    <button v-if="numStartAndEnd.start >= parseInt(continues / 2)" @click="$emit('pageChange', 1)">1</button>
-    <button v-if="numStartAndEnd.start > parseInt(continues / 2)">···</button>
+    <button v-if="numStartAndEnd.start > 1" @click="$emit('pageChange', 1)">1</button>
+    <button v-if="numStartAndEnd.start > 2">···</button>
 
     <button v-for="(page, index) in totalPage" :key="index" v-show="page >= numStartAndEnd.start && page <= numStartAndEnd.end" :class="{ active: pageNo === page }" @click="$emit('pageChange', page)">{{ page }}</button>
 

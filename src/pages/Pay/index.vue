@@ -81,31 +81,90 @@
 </template>
 
 <script>
+import QRCode from 'qrcode'
 export default {
   name: 'Pay',
+  data() {
+    return {
+      payInfo: {},
+      // 查询订单支付状态的定时器
+      timer: null,
+      payCode: ''
+    }
+  },
   computed: {
     orderId() {
       return this.$route.query.orderId
     }
   },
   created() {
-    // this.getOrderPayInfo()
+    this.getOrderPayInfo()
     // 接口503了，获取不了数据，等接口正常再请求
+    // 用mock数据顶上了，要是接口正常了记得把api里的mock接口注释掉，解开注释真正的接口 ↑
   },
   methods: {
     async getOrderPayInfo() {
       console.log(this.$route.query)
       const res = await this.$API.reqOrderPayInfo(this.orderId)
       if (res.code === 200) {
-        console.log(res)
+        console.log('getOrderPayInfo获取支付信息和二维码链接成功', res)
+        this.payInfo = res.data
       } else {
         console.log('获取订单支付信息失败！')
       }
     },
 
     // 立即支付
-    payNow() {
+    async payNow() {
       // do somthing
+      // 根据getOrderPayInfo获得的数据,将二维码链接经过QRCode转成二维码图片 展示在messagebox中
+
+      const qrurl = await QRCode.toDataURL(this.payInfo.codeUrl)
+      this.$alert(`<img src="${qrurl}" />`, '微信支付', {
+        dangerouslyUseHTMLString: true,
+        showClose: false,
+        showCancelButton: true,
+        cancelButtonText: '支付遇到问题',
+        confirmButtonText: '支付完成',
+        center: true,
+        beforeClose(action, instance, done) {
+          if (action === 'cancel') {
+            alert('请联系管理员')
+            clearInterval(this.timer)
+            this.timer = null
+            done()
+          } else {
+            if (this.payCode === 200) {
+              clearInterval(this.timer)
+              this.timer = null
+              // 保存成功状态码，为用户主动点击"支付完成"按钮查询用
+              this.payCode = res.code
+              // 关闭messagebox
+              done()
+              // 跳转支付成功路由
+              this.$router.push({ name: 'paysuccess' })
+            } else {
+              instance.confirmButtonLoading = true
+              instance.confirmButtonText = '执行中...'
+            }
+          }
+        }
+      })
+      this.timer = setInterval(async () => {
+        console.log('进入了定时器')
+        const res = await this.$API.reqOrderPayStatus(this.payInfo.orderId)
+        if (res.code === 200) {
+          // 若支付成功 清理定时器
+          clearInterval(this.timer)
+          this.timer = null
+          // 保存成功状态码，为用户主动点击"支付完成"按钮查询用
+          this.payCode = res.code
+          // 关闭messagebox
+          this.$msgbox.close()
+          // 跳转支付成功路由
+          this.$router.push({ name: 'paysuccess' })
+        }
+      }, 5000)
     }
   }
 }

@@ -140,3 +140,12 @@ a:link:hover {
   clear: both;
   visibility: hidden;
 }
+
+/* 解决element-ui中MessageBox 弹框时滚动条导致布局抖动 */
+html {
+  width: 100vw;
+  overflow-x: hidden;
+}
+body {
+  padding-right: 0px !important;
+}
