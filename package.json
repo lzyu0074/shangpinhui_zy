@@ -36,7 +36,7 @@
     "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {
-    "root": true,
+    "root": false,
     "env": {
       "node": true
     },
@@ -45,9 +45,11 @@
       "eslint:recommended"
     ],
     "parserOptions": {
-      "parser": "@babel/eslint-parser"
+      "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-new": "off"
+    }
   },
   "browserslist": [
     "> 1%",
