@@ -20,6 +20,12 @@ import * as API from '@/api'
 
 // elementUI 按需引入
 import { Button, MessageBox } from 'element-ui';
+// 懒加载
+import VueLazyload from 'vue-lazyload'
+// 导入懒加载的loading图片
+import loadingImg from '@/assets/images/loading.gif'
+// 引入校验插件
+import '@/plugins/veevalidate'
 
 // 全局组件： 
 import TypeNav from '@/components/TypeNav'
@@ -30,6 +36,9 @@ Vue.component(Pagination.name, Pagination)
 
 // elementUI
 Vue.component(Button.name, Button);
+Vue.use(VueLazyload, {
+  loading: loadingImg,
+})
 
 
 Vue.config.productionTip = false

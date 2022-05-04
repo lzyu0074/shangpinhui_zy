@@ -105,8 +105,8 @@ export default {
           userId: 2,
           consignee: '李龙',
           phoneNum: '1501122111',
-          isDefault: '0',
-          isCurrent: '0'
+          isDefault: '1',
+          isCurrent: '1'
         },
         {
           id: 3,
@@ -114,8 +114,8 @@ export default {
           userId: 3,
           consignee: '赵卓峰',
           phoneNum: '13455667111',
-          isDefault: '1',
-          isCurrent: '1'
+          isDefault: '0',
+          isCurrent: '0'
         },
         {
           id: 4,

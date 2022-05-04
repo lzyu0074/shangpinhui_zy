@@ -1,7 +1,7 @@
 <template>
   <div class="cart-complete-wrap">
     <div class="cart-complete">
-      <h3><i class="sui-icon icon-pc-right"></i>商品已成功加入购物车！</h3>
+      <h3><img src="./images/right.png" class="icon-pc-right" width="28" height="28" />商品已成功加入购物车！</h3>
       <div class="goods">
         <div class="left-good">
           <div class="left-pic">
@@ -17,7 +17,7 @@
         </div>
         <div class="right-gocart">
           <router-link class="sui-btn btn-xlarge" :to="`/detail/${skuInfo.id}`">查看商品详情</router-link>
-          <router-link to="/shopcart">去购物车结算 > </router-link>
+          <router-link to="/shopcart" class="btn-danger">去购物车结算 > </router-link>
         </div>
       </div>
     </div>
@@ -56,13 +56,15 @@ export default {
       padding-top: 15px;
       padding-bottom: 15px;
       margin: 0;
+      vertical-align: middle;
+      display: flex;
+      align-items: center;
 
       .icon-pc-right {
         background-color: #fff;
-        border: 2px solid #6aaf04;
+
         padding: 3px;
         margin-right: 8px;
-        border-radius: 15px;
       }
     }
 
@@ -133,7 +135,13 @@ export default {
         }
 
         .btn-danger:hover {
-          background-color: #e1251b;
+          background-color: #bb221a;
+        }
+        .btn-xlarge {
+          margin-right: 10px;
+        }
+        .btn-xlarge:hover {
+          border: 1px solid #e1251b;
         }
       }
     }

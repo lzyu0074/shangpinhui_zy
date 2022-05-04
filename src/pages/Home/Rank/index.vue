@@ -23,13 +23,13 @@
         </a>
       </div>
     </div>
-    <div class="content">
+    <div class="content" v-lazy-container="{ selector: 'img' }">
       <ul>
         <li>
           <div class="img-item">
             <p class="tab-pic">
               <a href="#">
-                <img src="./images/1.jpg" />
+                <img data-src="https://img12.360buyimg.com/n7/jfs/t1/98980/4/29572/222282/626d08d3E8eb7ea0e/3fd3e9d4e468c19c.jpg" />
               </a>
             </p>
             <div class="tab-info">
@@ -42,7 +42,7 @@
           <div class="img-item">
             <p class="tab-pic">
               <a href="#">
-                <img src="./images/1.jpg" />
+                <img data-src="https://img14.360buyimg.com/n0/jfs/t1/180319/24/24601/95108/626fff47Ec24b9fc9/ae60c9e660b7b907.jpg.avif" />
               </a>
             </p>
             <div class="tab-info">
@@ -55,7 +55,7 @@
           <div class="img-item">
             <p class="tab-pic">
               <a href="#">
-                <img src="./images/1.jpg" />
+                <img data-src="https://img14.360buyimg.com/n0/jfs/t1/221160/12/15386/77310/626ffc88E4a4a1cd7/42b322af6ccd11ca.jpg.avif" />
               </a>
             </p>
             <div class="tab-info">
@@ -68,7 +68,7 @@
           <div class="img-item">
             <p class="tab-pic">
               <a href="#">
-                <img src="./images/1.jpg" />
+                <img data-src="https://img14.360buyimg.com/n0/jfs/t1/99762/39/27105/185230/626a5d92E52926c7b/e30be6408985b2f1.jpg.avif" />
               </a>
             </p>
             <div class="tab-info">

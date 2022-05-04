@@ -77,7 +77,9 @@ export default {
     async gotoLogin() {
       try {
         await this.$store.dispatch('user/gotoLogin', { phone: this.username, password: this.password })
-        this.$router.push({ name: 'home' })
+        // 先判断query参数有没有带着redirect的数据，如果有，跳到该数据对应的路由、如果没有，正常转到home页
+        const redirect = this.$route.query.redirect
+        redirect ? this.$router.push(redirect) : this.$router.push({ name: 'home' })
       } catch (error) {
         alert(error.message)
       }

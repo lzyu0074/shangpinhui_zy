@@ -1,20 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Home from '@/pages/Home'
-import Login from '@/pages/Login'
-import Register from '@/pages/Register'
-import Search from '@/pages/Search'
-import Detail from '@/pages/Detail'
-import AddCartSuccess from '@/pages/AddCartSuccess'
-import ShopCart from '@/pages/ShopCart'
+
 import store from '@/store'
-import Trade from '@/pages/Trade'
-import Pay from '@/pages/Pay'
-import PaySuccess from '@/pages/PaySuccess'
-import Center from '@/pages/Center'
-import MyOrder from '@/pages/Center/MyOrder'
-import GroupOrder from '@/pages/Center/GroupOrder'
+
+// 路由数组
+import routes from './routes'
 
 Vue.use(VueRouter)
 
@@ -38,29 +29,8 @@ VueRouter.prototype.replace = function(location, resolve, reject) {
 }
 
 const router = new VueRouter({
-  routes: [
-    { path: '/', redirect: '/home' },
-    { path: '/home', component: Home, meta: { footerShow: true }, name: 'home' },
-    { path: '/login', component: Login, meta: { footerShow: false }, name: 'login' },
-    { path: '/register', component: Register, meta: { footerShow: false }, name: 'register' },
-    { path: '/search/:keyword?', component: Search, meta: { footerShow: true }, name: 'search' },
-    { path: '/detail/:skuid', component: Detail, meta: { footerShow: true }, name: 'detail' },
-    { path: '/addCartsuccess', component: AddCartSuccess, meta: { footerShow: true }, name: 'AddCartSuccess' },
-    { path: '/shopcart', component: ShopCart, meta: { footerShow: true }, name: 'ShopCart' },
-    { path: '/trade', component: Trade, meta: { footerShow: true }, name: 'Trade' },
-    { path: '/pay', component: Pay, meta: { footerShow: true }, name: 'pay' },
-    { path: '/paysuccess', component: PaySuccess, meta: { footerShow: true }, name: 'paysuccess' },
-    {
-      path: '/center', component: Center, meta: { footerShow: true }, name: 'center',
-      redirect: '/center/myorder',
-      children: [
-        { path: 'myorder', component: MyOrder, name: 'myorder' },
-        { path: 'grouporder', component: GroupOrder, name: 'grouporder' },
-      ],
-
-    },
-
-  ],
+  routes
+  ,
   // 跳转路由后滚动条的位置
   scrollBehavior(to, from, savedPosition) {
     // return 期望滚动到哪个的位置
@@ -70,6 +40,7 @@ const router = new VueRouter({
 
 // 为解决2个问题：1、登录后还能通过设置浏览器地址栏跳到登录页面。2、登录后 一刷新就没有了用户信息
 // 设置导航守卫
+// 再解决未登录导航问题
 router.beforeEach(async (to, from, next) => {
   // 若仓库中的token存在(仓库中的token拉取自本地存储)，就是已登录状态
   if (store.state.user.userToken) {
@@ -92,9 +63,15 @@ router.beforeEach(async (to, from, next) => {
     }
     // 若token不存在，就是没登录
   } else {
-    next()
+    const toPath = to.path
+    // 如果没登录，要去trade、pay、center则先登录,此时login路由带着本来想去的地方的path，在登录组件中判断路由中有没有带东西，带了的话就登录跳到那个path
+    if (toPath.includes('/trade') || toPath.includes('/pay') || toPath.includes('/center') || toPath.includes('/shopcart')) {
+      next({ name: 'login', query: { redirect: toPath } })
+    } else {
+      next()
+    }
+
   }
-  // next()
 })
 
 export default router

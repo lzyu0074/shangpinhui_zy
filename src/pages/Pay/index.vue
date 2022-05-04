@@ -118,7 +118,6 @@ export default {
     async payNow() {
       // do somthing
       // 根据getOrderPayInfo获得的数据,将二维码链接经过QRCode转成二维码图片 展示在messagebox中
-
       const qrurl = await QRCode.toDataURL(this.payInfo.codeUrl)
       this.$alert(`<img src="${qrurl}" />`, '微信支付', {
         dangerouslyUseHTMLString: true,
@@ -130,6 +129,7 @@ export default {
         beforeClose(action, instance, done) {
           if (action === 'cancel') {
             alert('请联系管理员')
+            console.log('this.timer', this.timer)
             clearInterval(this.timer)
             this.timer = null
             done()
@@ -149,7 +149,8 @@ export default {
             }
           }
         }
-      })
+      }).catch((err) => console.log('支付遇到问题：', err))
+      // 定时器，不断询问服务器是否支付成功
       this.timer = setInterval(async () => {
         console.log('进入了定时器')
         const res = await this.$API.reqOrderPayStatus(this.payInfo.orderId)
@@ -164,7 +165,19 @@ export default {
           // 跳转支付成功路由
           this.$router.push({ name: 'paysuccess' })
         }
-      }, 5000)
+      }, 10000)
+    }
+  },
+  // 组件内守卫/组件独享守卫
+  beforeRouteEnter(to, from, next) {
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当守卫执行前，组件实例还没被创建
+    console.log('Pay组件独享守卫:', from)
+    if (from.name !== 'trade') {
+      next(false)
+    } else {
+      next()
     }
   }
 }

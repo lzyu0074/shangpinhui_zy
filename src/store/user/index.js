@@ -38,10 +38,11 @@ const actions = {
   // 注册
   async gotoRegister({ commit }, userData) {
     const res = await reqRegister({ phone: userData.userPhone, password: userData.userPassword, code: userData.userVerification })
+    console.log('注册返回信息:', res);
     if (res.code === 200) {
       return 'ok'
     } else {
-      return Promise.reject(new Error('注册失败'))
+      return Promise.reject(new Error('注册失败:' + res.message))
     }
   },
   // 登录
@@ -53,7 +54,7 @@ const actions = {
       setTokenInLocalStorage(res.data.token)
       return 'ok'
     } else {
-      return Promise.reject(new Error('登录失败'))
+      return Promise.reject(new Error('登录失败:' + res.message))
     }
   },
   // 获取用户信息
